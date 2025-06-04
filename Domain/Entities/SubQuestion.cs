@@ -10,4 +10,5 @@ public class SubQuestion
     public string? Subquestion_text { get; set; }
     public int Question_Id { get; set; }
     public Question? Question { get; set; }
+    public ICollection<OptionQuestion>? OptionQuestions { get; set; }
 }
