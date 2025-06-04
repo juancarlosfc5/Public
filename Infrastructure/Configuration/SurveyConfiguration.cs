@@ -17,12 +17,14 @@ namespace Infrastructure.Configuration
 
             builder.Property(e => e.Created_at)
                 .HasColumnName("created_at")
-                .HasDefaultValueSql("now()")
+                .HasColumnType("datetime(6)")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)")
                 .ValueGeneratedOnAdd();
 
             builder.Property(e => e.Updated_at)
                 .HasColumnName("updated_at")
-                .HasDefaultValueSql("now()")
+                .HasColumnType("datetime(6)")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
                 .ValueGeneratedOnAddOrUpdate();
             // Trigger para actualizar el campo updated_at automáticamente
             // DELIMITER $$
