@@ -1,6 +1,6 @@
 namespace Domain.Entities;
 
-public class SumaryOption
+public class SumaryOption : BaseEntity
 {
     public int Id { get; set; }
     public string? Code_number { get; set; }

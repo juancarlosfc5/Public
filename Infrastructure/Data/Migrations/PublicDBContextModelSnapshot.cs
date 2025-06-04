@@ -349,11 +349,17 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("code_number");
 
+                    b.Property<DateTime>("Created_at")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("Question_Id")
                         .HasColumnType("int");
 
                     b.Property<int>("Survey_Id")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Updated_at")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Valuerta")
                         .HasColumnType("text")
