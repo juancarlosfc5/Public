@@ -1,10 +1,8 @@
 namespace Domain.Entities;
 
-public class OptionQuestion
+public class OptionQuestion : BaseEntity
 {
     public int Id { get; set; }
-    public DateTime Created_at { get; set; }
-    public DateTime Updated_at { get; set; }
     public string? Comment_optionres { get; set; }
     public string? Number_option { get; set; }
     public int Question_Id { get; set; }

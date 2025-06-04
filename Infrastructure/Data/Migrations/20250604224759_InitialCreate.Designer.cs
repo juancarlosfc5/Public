@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PublicDBContext))]
-    [Migration("20250604175439_InitialCreate")]
+    [Migration("20250604224759_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -352,11 +352,17 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("code_number");
 
+                    b.Property<DateTime>("Created_at")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("Question_Id")
                         .HasColumnType("int");
 
                     b.Property<int>("Survey_Id")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Updated_at")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Valuerta")
                         .HasColumnType("text")

@@ -1,10 +1,8 @@
 namespace Domain.Entities;
 
-public class Survey
+public class Survey : BaseEntity
 {
     public int Id { get; set; }
-    public DateTime Created_at { get; set; }
-    public DateTime Updated_at { get; set; }
     public string? Componenthtml { get; set; }
     public string? Componentreact { get; set; }
     public string? Description { get; set; }

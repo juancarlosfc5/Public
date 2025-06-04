@@ -1,10 +1,8 @@
 namespace Domain.Entities;
 
-public class Question
+public class Question : BaseEntity
 {
     public int Id { get; set; }
-    public DateTime Created_at { get; set; }
-    public DateTime Updated_at { get; set; }
     public string? Question_number { get; set; }
     public string? Response_type { get; set; }
     public string? Comment_question { get; set; }
