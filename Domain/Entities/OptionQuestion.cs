@@ -5,9 +5,8 @@ public class OptionQuestion
     public int Id { get; set; }
     public DateTime Created_at { get; set; }
     public DateTime Updated_at { get; set; }
-    public string? Subquestion_number { get; set; }
-    public string? Comment_subquestion { get; set; }
-    public string? Subquestion_text { get; set; }
+    public string? Comment_optionres { get; set; }
+    public string? Number_option { get; set; }
     public int Question_Id { get; set; }
     public Question? Question { get; set; }
     public int SubQuestion_Id { get; set; }

@@ -13,4 +13,5 @@ public class Question
     public Chapter? Chapter { get; set; }
     public ICollection<SubQuestion>? SubQuestions { get; set; }
     public ICollection<SumaryOption>? SumaryOptions { get; set; }
+    public ICollection<OptionQuestion>? OptionQuestions { get; set; }
 }
