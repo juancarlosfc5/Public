@@ -16,13 +16,15 @@ namespace Infrastructure.Configuration
 
             builder.Property(e => e.Created_at)
                 .HasColumnName("created_at")
-                .HasColumnType("datetime")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .HasColumnType("datetime(6)")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.Updated_at)
                 .HasColumnName("updated_at")
-                .HasColumnType("datetime")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+                .HasColumnType("datetime(6)")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
+                .ValueGeneratedOnAddOrUpdate();
 
             builder.Property(e => e.Componenthtml)
                 .HasColumnName("componenthtml")
