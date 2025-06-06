@@ -3,10 +3,10 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 namespace APIPublic.Controllers;
 
-public class CategoryCatalogController : BaseApiController
+public class SubQuestionController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork; //<- Se inyecta la unidad de trabajo
-    public CategoryCatalogController(IUnitOfWork unitOfWork)
+    public SubQuestionController(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -14,10 +14,10 @@ public class CategoryCatalogController : BaseApiController
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<CategoryCatalog>>> Get()
+    public async Task<ActionResult<IEnumerable<SubQuestion>>> Get()
     {
-        var CategoryCatalogs = await _unitOfWork.CategoryCatalogs.GetAllAsync();
-        return Ok(CategoryCatalogs);
+        var SubQuestions = await _unitOfWork.SubQuestions.GetAllAsync();
+        return Ok(SubQuestions);
     }
 
     [HttpGet("{id}")]
@@ -25,26 +25,26 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Get(int id)
     {
-        var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (CategoryCatalog == null)
+        var SubQuestion = await _unitOfWork.SubQuestions.GetByIdAsync(id);
+        if (SubQuestion == null)
         {
-            return NotFound($"CategoryCatalog with id {id} was not found.");
+            return NotFound($"SubQuestion with id {id} was not found.");
         }
-        return Ok(CategoryCatalog);
+        return Ok(SubQuestion);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CategoryCatalog>> Post(CategoryCatalog categoryCatalog)
+    public async Task<ActionResult<SubQuestion>> Post(SubQuestion subQuestion)
     {
-        _unitOfWork.CategoryCatalogs.Add(categoryCatalog);
+        _unitOfWork.SubQuestions.Add(subQuestion);
         await _unitOfWork.SaveAsync();
-        if (categoryCatalog == null)
+        if (subQuestion == null)
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(Post), new { id = categoryCatalog.Id }, categoryCatalog);
+        return CreatedAtAction(nameof(Post), new { id = subQuestion.Id }, subQuestion);
     }
 
     // PUT: api/Productos/4
@@ -52,29 +52,29 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put(int id, [FromBody] CategoryCatalog categoryCatalog)
+    public async Task<IActionResult> Put(int id, [FromBody] SubQuestion subQuestion)
     {
         // Validación: objeto nulo
-        if (categoryCatalog == null)
+        if (subQuestion == null)
             return BadRequest("El cuerpo de la solicitud está vacío.");
 
         // Validación: el ID de la URL debe coincidir con el del objeto (si viene con ID)
-        if (id != categoryCatalog.Id)
+        if (id != subQuestion.Id)
             return BadRequest("El ID de la URL no coincide con el ID del objeto enviado.");
 
         // Verificación: el recurso debe existir antes de actualizar
-        var existingCategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (existingCategoryCatalog == null)
-            return NotFound($"No se encontró el CategoryCatalog con ID {id}.");
+        var existingSubQuestion = await _unitOfWork.SubQuestions.GetByIdAsync(id);
+        if (existingSubQuestion == null)
+            return NotFound($"No se encontró el SubQuestion con ID {id}.");
 
         // Actualización controlada de campos específicos
-        existingCategoryCatalog.Name = categoryCatalog.Name;
+        existingSubQuestion.Subquestion_number = subQuestion.Subquestion_number;
         // Puedes agregar más propiedades aquí según el modelo
 
-        _unitOfWork.CategoryCatalogs.Update(existingCategoryCatalog);
+        _unitOfWork.SubQuestions.Update(existingSubQuestion);
         await _unitOfWork.SaveAsync();
 
-        return Ok(existingCategoryCatalog);
+        return Ok(existingSubQuestion);
     }
     
     //DELETE: api/Productos
@@ -83,11 +83,11 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (CategoryCatalog == null)
+        var SubQuestion = await _unitOfWork.SubQuestions.GetByIdAsync(id);
+        if (SubQuestion == null)
             return NotFound();
 
-        _unitOfWork.CategoryCatalogs.Remove(CategoryCatalog);
+        _unitOfWork.SubQuestions.Remove(SubQuestion);
         await _unitOfWork.SaveAsync();
 
         return NoContent();

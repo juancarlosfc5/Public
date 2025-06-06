@@ -3,10 +3,10 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 namespace APIPublic.Controllers;
 
-public class CategoryCatalogController : BaseApiController
+public class OptionQuestionController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork; //<- Se inyecta la unidad de trabajo
-    public CategoryCatalogController(IUnitOfWork unitOfWork)
+    public OptionQuestionController(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -14,10 +14,10 @@ public class CategoryCatalogController : BaseApiController
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<CategoryCatalog>>> Get()
+    public async Task<ActionResult<IEnumerable<OptionQuestion>>> Get()
     {
-        var CategoryCatalogs = await _unitOfWork.CategoryCatalogs.GetAllAsync();
-        return Ok(CategoryCatalogs);
+        var OptionQuestions = await _unitOfWork.OptionQuestions.GetAllAsync();
+        return Ok(OptionQuestions);
     }
 
     [HttpGet("{id}")]
@@ -25,26 +25,26 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Get(int id)
     {
-        var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (CategoryCatalog == null)
+        var OptionQuestion = await _unitOfWork.OptionQuestions.GetByIdAsync(id);
+        if (OptionQuestion == null)
         {
-            return NotFound($"CategoryCatalog with id {id} was not found.");
+            return NotFound($"OptionQuestion with id {id} was not found.");
         }
-        return Ok(CategoryCatalog);
+        return Ok(OptionQuestion);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CategoryCatalog>> Post(CategoryCatalog categoryCatalog)
+    public async Task<ActionResult<OptionQuestion>> Post(OptionQuestion optionQuestion)
     {
-        _unitOfWork.CategoryCatalogs.Add(categoryCatalog);
+        _unitOfWork.OptionQuestions.Add(optionQuestion);
         await _unitOfWork.SaveAsync();
-        if (categoryCatalog == null)
+        if (optionQuestion == null)
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(Post), new { id = categoryCatalog.Id }, categoryCatalog);
+        return CreatedAtAction(nameof(Post), new { id = optionQuestion.Id }, optionQuestion);
     }
 
     // PUT: api/Productos/4
@@ -52,29 +52,29 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put(int id, [FromBody] CategoryCatalog categoryCatalog)
+    public async Task<IActionResult> Put(int id, [FromBody] OptionQuestion optionQuestion)
     {
         // Validación: objeto nulo
-        if (categoryCatalog == null)
+        if (optionQuestion == null)
             return BadRequest("El cuerpo de la solicitud está vacío.");
 
         // Validación: el ID de la URL debe coincidir con el del objeto (si viene con ID)
-        if (id != categoryCatalog.Id)
+        if (id != optionQuestion.Id)
             return BadRequest("El ID de la URL no coincide con el ID del objeto enviado.");
 
         // Verificación: el recurso debe existir antes de actualizar
-        var existingCategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (existingCategoryCatalog == null)
-            return NotFound($"No se encontró el CategoryCatalog con ID {id}.");
+        var existingOptionQuestion = await _unitOfWork.OptionQuestions.GetByIdAsync(id);
+        if (existingOptionQuestion == null)
+            return NotFound($"No se encontró el OptionQuestion con ID {id}.");
 
         // Actualización controlada de campos específicos
-        existingCategoryCatalog.Name = categoryCatalog.Name;
+        existingOptionQuestion.Number_option = optionQuestion.Number_option;
         // Puedes agregar más propiedades aquí según el modelo
 
-        _unitOfWork.CategoryCatalogs.Update(existingCategoryCatalog);
+        _unitOfWork.OptionQuestions.Update(existingOptionQuestion);
         await _unitOfWork.SaveAsync();
 
-        return Ok(existingCategoryCatalog);
+        return Ok(existingOptionQuestion);
     }
     
     //DELETE: api/Productos
@@ -83,11 +83,11 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (CategoryCatalog == null)
+        var OptionQuestion = await _unitOfWork.OptionQuestions.GetByIdAsync(id);
+        if (OptionQuestion == null)
             return NotFound();
 
-        _unitOfWork.CategoryCatalogs.Remove(CategoryCatalog);
+        _unitOfWork.OptionQuestions.Remove(OptionQuestion);
         await _unitOfWork.SaveAsync();
 
         return NoContent();

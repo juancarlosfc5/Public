@@ -3,10 +3,10 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 namespace APIPublic.Controllers;
 
-public class CategoryCatalogController : BaseApiController
+public class SurveyController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork; //<- Se inyecta la unidad de trabajo
-    public CategoryCatalogController(IUnitOfWork unitOfWork)
+    public SurveyController(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -14,10 +14,10 @@ public class CategoryCatalogController : BaseApiController
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<CategoryCatalog>>> Get()
+    public async Task<ActionResult<IEnumerable<Survey>>> Get()
     {
-        var CategoryCatalogs = await _unitOfWork.CategoryCatalogs.GetAllAsync();
-        return Ok(CategoryCatalogs);
+        var Surveys = await _unitOfWork.Surveys.GetAllAsync();
+        return Ok(Surveys);
     }
 
     [HttpGet("{id}")]
@@ -25,26 +25,26 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Get(int id)
     {
-        var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (CategoryCatalog == null)
+        var Survey = await _unitOfWork.Surveys.GetByIdAsync(id);
+        if (Survey == null)
         {
-            return NotFound($"CategoryCatalog with id {id} was not found.");
+            return NotFound($"Survey with id {id} was not found.");
         }
-        return Ok(CategoryCatalog);
+        return Ok(Survey);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CategoryCatalog>> Post(CategoryCatalog categoryCatalog)
+    public async Task<ActionResult<Survey>> Post(Survey survey)
     {
-        _unitOfWork.CategoryCatalogs.Add(categoryCatalog);
+        _unitOfWork.Surveys.Add(survey);
         await _unitOfWork.SaveAsync();
-        if (categoryCatalog == null)
+        if (survey == null)
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(Post), new { id = categoryCatalog.Id }, categoryCatalog);
+        return CreatedAtAction(nameof(Post), new { id = survey.Id }, survey);
     }
 
     // PUT: api/Productos/4
@@ -52,29 +52,29 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put(int id, [FromBody] CategoryCatalog categoryCatalog)
+    public async Task<IActionResult> Put(int id, [FromBody] Survey survey)
     {
         // Validación: objeto nulo
-        if (categoryCatalog == null)
+        if (survey == null)
             return BadRequest("El cuerpo de la solicitud está vacío.");
 
         // Validación: el ID de la URL debe coincidir con el del objeto (si viene con ID)
-        if (id != categoryCatalog.Id)
+        if (id != survey.Id)
             return BadRequest("El ID de la URL no coincide con el ID del objeto enviado.");
 
         // Verificación: el recurso debe existir antes de actualizar
-        var existingCategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (existingCategoryCatalog == null)
-            return NotFound($"No se encontró el CategoryCatalog con ID {id}.");
+        var existingSurvey = await _unitOfWork.Surveys.GetByIdAsync(id);
+        if (existingSurvey == null)
+            return NotFound($"No se encontró el Survey con ID {id}.");
 
         // Actualización controlada de campos específicos
-        existingCategoryCatalog.Name = categoryCatalog.Name;
+        existingSurvey.Name = survey.Name;
         // Puedes agregar más propiedades aquí según el modelo
 
-        _unitOfWork.CategoryCatalogs.Update(existingCategoryCatalog);
+        _unitOfWork.Surveys.Update(existingSurvey);
         await _unitOfWork.SaveAsync();
 
-        return Ok(existingCategoryCatalog);
+        return Ok(existingSurvey);
     }
     
     //DELETE: api/Productos
@@ -83,11 +83,11 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (CategoryCatalog == null)
+        var Survey = await _unitOfWork.Surveys.GetByIdAsync(id);
+        if (Survey == null)
             return NotFound();
 
-        _unitOfWork.CategoryCatalogs.Remove(CategoryCatalog);
+        _unitOfWork.Surveys.Remove(Survey);
         await _unitOfWork.SaveAsync();
 
         return NoContent();
