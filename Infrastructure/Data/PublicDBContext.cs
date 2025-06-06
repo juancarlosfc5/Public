@@ -17,7 +17,7 @@ namespace Infrastructure.Data
         public DbSet<SubQuestion> SubQuestions { get; set; }
         public DbSet<SumaryOption> SumaryOptions { get; set; }
         public DbSet<OptionResponse> OptionResponses { get; set; }
-        public DbSet<CategoryCatalog> CategoryCatalogs { get; set; }
+        public DbSet<CategoryOption> CategoryCatalogs { get; set; }
         public DbSet<CategoryOption> CategoryOptions { get; set; }
         public DbSet<OptionQuestion> OptionQuestions { get; set; }
         
