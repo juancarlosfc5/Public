@@ -2,49 +2,54 @@ using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 namespace APIPublic.Controllers;
+using Application.DTOs;
+using AutoMapper;
 
 public class OptionResponseController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork; //<- Se inyecta la unidad de trabajo
-    public OptionResponseController(IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper; //<- Se inyecta el mapeador de AutoMapper
+    public OptionResponseController(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<OptionResponse>>> Get()
+    public async Task<ActionResult<IEnumerable<OptionResponseDto>>> Get()
     {
-        var OptionResponses = await _unitOfWork.OptionResponses.GetAllAsync();
-        return Ok(OptionResponses);
+        var OptionResponse = await _unitOfWork.OptionResponses.GetAllAsync();
+        return _mapper.Map<List<OptionResponseDto>>(OptionResponse);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<ActionResult<OptionResponseDto>> Get(int id)
     {
         var OptionResponse = await _unitOfWork.OptionResponses.GetByIdAsync(id);
         if (OptionResponse == null)
         {
             return NotFound($"OptionResponse with id {id} was not found.");
         }
-        return Ok(OptionResponse);
+        return _mapper.Map<OptionResponseDto>(OptionResponse);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<OptionResponse>> Post(OptionResponse optionResponse)
+    public async Task<ActionResult<OptionResponse>> Post(OptionResponseDto optionResponseDto)
     {
+        var optionResponse = _mapper.Map<OptionResponse>(optionResponseDto);
         _unitOfWork.OptionResponses.Add(optionResponse);
         await _unitOfWork.SaveAsync();
-        if (optionResponse == null)
+        if (optionResponseDto == null)
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(Post), new { id = optionResponse.Id }, optionResponse);
+        return CreatedAtAction(nameof(Post), new { id = optionResponseDto.Id }, optionResponseDto);
     }
 
     // PUT: api/Productos/4
@@ -52,29 +57,15 @@ public class OptionResponseController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put(int id, [FromBody] OptionResponse optionResponse)
+    public async Task<IActionResult> Put(int id, [FromBody] OptionResponseDto optionResponseDto)
     {
         // Validación: objeto nulo
-        if (optionResponse == null)
-            return BadRequest("El cuerpo de la solicitud está vacío.");
-
-        // Validación: el ID de la URL debe coincidir con el del objeto (si viene con ID)
-        if (id != optionResponse.Id)
-            return BadRequest("El ID de la URL no coincide con el ID del objeto enviado.");
-
-        // Verificación: el recurso debe existir antes de actualizar
-        var existingOptionResponse = await _unitOfWork.OptionResponses.GetByIdAsync(id);
-        if (existingOptionResponse == null)
-            return NotFound($"No se encontró el OptionResponse con ID {id}.");
-
-        // Actualización controlada de campos específicos
-        existingOptionResponse.Option_text = optionResponse.Option_text;
-        // Puedes agregar más propiedades aquí según el modelo
-
-        _unitOfWork.OptionResponses.Update(existingOptionResponse);
+        if (optionResponseDto == null)
+            return NotFound();
+        var optionResponse = _mapper.Map<OptionResponse>(optionResponseDto);
+        _unitOfWork.OptionResponses.Update(optionResponse);
         await _unitOfWork.SaveAsync();
-
-        return Ok(existingOptionResponse);
+        return Ok(optionResponseDto);
     }
     
     //DELETE: api/Productos
@@ -86,10 +77,8 @@ public class OptionResponseController : BaseApiController
         var OptionResponse = await _unitOfWork.OptionResponses.GetByIdAsync(id);
         if (OptionResponse == null)
             return NotFound();
-
         _unitOfWork.OptionResponses.Remove(OptionResponse);
         await _unitOfWork.SaveAsync();
-
         return NoContent();
     }
 }

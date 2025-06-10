@@ -2,49 +2,54 @@ using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 namespace APIPublic.Controllers;
+using Application.DTOs;
+using AutoMapper;
 
 public class CategoryCatalogController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork; //<- Se inyecta la unidad de trabajo
-    public CategoryCatalogController(IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper; //<- Se inyecta el mapeador de AutoMapper
+    public CategoryCatalogController(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<CategoryCatalog>>> Get()
+    public async Task<ActionResult<IEnumerable<CategoryCatalogDto>>> Get()
     {
-        var CategoryCatalogs = await _unitOfWork.CategoryCatalogs.GetAllAsync();
-        return Ok(CategoryCatalogs);
+        var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetAllAsync();
+        return _mapper.Map<List<CategoryCatalogDto>>(CategoryCatalog);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<ActionResult<CategoryCatalogDto>> Get(int id)
     {
         var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
         if (CategoryCatalog == null)
         {
             return NotFound($"CategoryCatalog with id {id} was not found.");
         }
-        return Ok(CategoryCatalog);
+        return _mapper.Map<CategoryCatalogDto>(CategoryCatalog);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CategoryCatalog>> Post(CategoryCatalog categoryCatalog)
+    public async Task<ActionResult<CategoryCatalog>> Post(CategoryCatalogDto categoryCatalogDto)
     {
+        var categoryCatalog = _mapper.Map<CategoryCatalog>(categoryCatalogDto);
         _unitOfWork.CategoryCatalogs.Add(categoryCatalog);
         await _unitOfWork.SaveAsync();
-        if (categoryCatalog == null)
+        if (categoryCatalogDto == null)
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(Post), new { id = categoryCatalog.Id }, categoryCatalog);
+        return CreatedAtAction(nameof(Post), new { id = categoryCatalogDto.Id }, categoryCatalogDto);
     }
 
     // PUT: api/Productos/4
@@ -52,29 +57,15 @@ public class CategoryCatalogController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put(int id, [FromBody] CategoryCatalog categoryCatalog)
+    public async Task<IActionResult> Put(int id, [FromBody] CategoryCatalogDto categoryCatalogDto)
     {
         // Validación: objeto nulo
-        if (categoryCatalog == null)
-            return BadRequest("El cuerpo de la solicitud está vacío.");
-
-        // Validación: el ID de la URL debe coincidir con el del objeto (si viene con ID)
-        if (id != categoryCatalog.Id)
-            return BadRequest("El ID de la URL no coincide con el ID del objeto enviado.");
-
-        // Verificación: el recurso debe existir antes de actualizar
-        var existingCategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
-        if (existingCategoryCatalog == null)
-            return NotFound($"No se encontró el CategoryCatalog con ID {id}.");
-
-        // Actualización controlada de campos específicos
-        existingCategoryCatalog.Name = categoryCatalog.Name;
-        // Puedes agregar más propiedades aquí según el modelo
-
-        _unitOfWork.CategoryCatalogs.Update(existingCategoryCatalog);
+        if (categoryCatalogDto == null)
+            return NotFound();
+        var categoryCatalog = _mapper.Map<CategoryCatalog>(categoryCatalogDto);
+        _unitOfWork.CategoryCatalogs.Update(categoryCatalog);
         await _unitOfWork.SaveAsync();
-
-        return Ok(existingCategoryCatalog);
+        return Ok(categoryCatalogDto);
     }
     
     //DELETE: api/Productos
@@ -86,10 +77,8 @@ public class CategoryCatalogController : BaseApiController
         var CategoryCatalog = await _unitOfWork.CategoryCatalogs.GetByIdAsync(id);
         if (CategoryCatalog == null)
             return NotFound();
-
         _unitOfWork.CategoryCatalogs.Remove(CategoryCatalog);
         await _unitOfWork.SaveAsync();
-
         return NoContent();
     }
 }
