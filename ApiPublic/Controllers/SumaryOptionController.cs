@@ -2,49 +2,54 @@ using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 namespace APIPublic.Controllers;
+using Application.DTOs;
+using AutoMapper;
 
 public class SumaryOptionController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork; //<- Se inyecta la unidad de trabajo
-    public SumaryOptionController(IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper; //<- Se inyecta el mapeador de AutoMapper
+    public SumaryOptionController(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<SumaryOption>>> Get()
+    public async Task<ActionResult<IEnumerable<SumaryOptionDto>>> Get()
     {
-        var SumaryOptions = await _unitOfWork.SumaryOptions.GetAllAsync();
-        return Ok(SumaryOptions);
+        var SumaryOption = await _unitOfWork.SumaryOptions.GetAllAsync();
+        return _mapper.Map<List<SumaryOptionDto>>(SumaryOption);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<ActionResult<SumaryOptionDto>> Get(int id)
     {
         var SumaryOption = await _unitOfWork.SumaryOptions.GetByIdAsync(id);
         if (SumaryOption == null)
         {
             return NotFound($"SumaryOption with id {id} was not found.");
         }
-        return Ok(SumaryOption);
+        return _mapper.Map<SumaryOptionDto>(SumaryOption);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<SumaryOption>> Post(SumaryOption sumaryOption)
+    public async Task<ActionResult<SumaryOption>> Post(SumaryOptionDto sumaryOptionDto)
     {
+        var sumaryOption = _mapper.Map<SumaryOption>(sumaryOptionDto);
         _unitOfWork.SumaryOptions.Add(sumaryOption);
         await _unitOfWork.SaveAsync();
-        if (sumaryOption == null)
+        if (sumaryOptionDto == null)
         {
             return BadRequest();
         }
-        return CreatedAtAction(nameof(Post), new { id = sumaryOption.Id }, sumaryOption);
+        return CreatedAtAction(nameof(Post), new { id = sumaryOptionDto.Id }, sumaryOptionDto);
     }
 
     // PUT: api/Productos/4
@@ -52,29 +57,14 @@ public class SumaryOptionController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put(int id, [FromBody] SumaryOption sumaryOption)
+    public async Task<IActionResult> Put(int id, [FromBody] SumaryOptionDto sumaryOptionDto)
     {
-        // Validación: objeto nulo
-        if (sumaryOption == null)
-            return BadRequest("El cuerpo de la solicitud está vacío.");
-
-        // Validación: el ID de la URL debe coincidir con el del objeto (si viene con ID)
-        if (id != sumaryOption.Id)
-            return BadRequest("El ID de la URL no coincide con el ID del objeto enviado.");
-
-        // Verificación: el recurso debe existir antes de actualizar
-        var existingSumaryOption = await _unitOfWork.SumaryOptions.GetByIdAsync(id);
-        if (existingSumaryOption == null)
-            return NotFound($"No se encontró el SumaryOption con ID {id}.");
-
-        // Actualización controlada de campos específicos
-        existingSumaryOption.Valuerta = sumaryOption.Valuerta;
-        // Puedes agregar más propiedades aquí según el modelo
-
-        _unitOfWork.SumaryOptions.Update(existingSumaryOption);
+        if (sumaryOptionDto == null)
+            return NotFound();
+        var sumaryOption = _mapper.Map<SumaryOption>(sumaryOptionDto);
+        _unitOfWork.SumaryOptions.Update(sumaryOption);
         await _unitOfWork.SaveAsync();
-
-        return Ok(existingSumaryOption);
+        return Ok(sumaryOptionDto);
     }
     
     //DELETE: api/Productos
@@ -86,10 +76,8 @@ public class SumaryOptionController : BaseApiController
         var SumaryOption = await _unitOfWork.SumaryOptions.GetByIdAsync(id);
         if (SumaryOption == null)
             return NotFound();
-
         _unitOfWork.SumaryOptions.Remove(SumaryOption);
         await _unitOfWork.SaveAsync();
-
         return NoContent();
     }
 }
