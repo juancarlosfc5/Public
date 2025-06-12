@@ -20,6 +20,8 @@ namespace Infrastructure.Data
         public DbSet<CategoryOption> CategoryCatalogs { get; set; }
         public DbSet<CategoryOption> CategoryOptions { get; set; }
         public DbSet<OptionQuestion> OptionQuestions { get; set; }
+        public DbSet<Member> Members { get; set; }
+        public DbSet<Rol> Rols { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

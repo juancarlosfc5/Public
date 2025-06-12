@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Domain\\Domain.csproj": {}
+    "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Domain\\Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Domain\\Domain.csproj": {
+    "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Domain\\Domain.csproj",
+        "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\Reyes\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Domain\\obj\\",
+        "outputPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Reyes\\AppData\\Roaming\\NuGet\\NuGet.Config"
