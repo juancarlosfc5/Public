@@ -16,6 +16,8 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private ISubQuestionRepository? _subQuestion;
     private ISumaryOptionRepository? _sumaryOption;
     private ISurveyRepository? _survey;
+    private IMemberRepository? _member;
+    private IRolRepository? _rol;
     public UnitOfWork(PublicDBContext context)
     {
         _context = context;
@@ -116,6 +118,28 @@ public class UnitOfWork : IUnitOfWork, IDisposable
                 _survey = new SurveyRepository(_context);
             }
             return _survey;
+        }
+    }
+    public IMemberRepository Members
+    {
+        get
+        {
+            if (_member == null)
+            {
+                _member = new MemberRepository(_context);
+            }
+            return _member;
+        }
+    }
+    public IRolRepository Rols
+    {
+        get
+        {
+            if (_rol == null)
+            {
+                _rol = new RolRepository(_context);
+            }
+            return _rol;
         }
     }
     public async Task<int> SaveAsync()

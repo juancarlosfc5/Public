@@ -805,11 +805,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Infrastructure\\Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Infrastructure\\Infrastructure.csproj",
+      "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Infrastructure\\Infrastructure.csproj",
       "packagesPath": "C:\\Users\\Reyes\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Reyes\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -824,11 +824,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Application\\Application.csproj"
+            "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Application\\Application.csproj"
             },
-            "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Public\\Domain\\Domain.csproj"
+            "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\Reyes\\Downloads\\1. Campus\\2. Projects\\Entity\\Survey\\Domain\\Domain.csproj"
             }
           }
         }
